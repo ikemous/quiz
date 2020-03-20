@@ -39,11 +39,13 @@ mainEl.appendChild(mainDivEl);//Add Div in the main tp hold all content
     mainDivEl.appendChild(questionEl);//Add Header for question
     mainDivEl.appendChild(quizRulesEl);//Paragraph Used To Set The Quiz Rules
     mainDivEl.appendChild(startButtonEl);//Add Starting Button For The Start of The Quiz
+    mainDivEl.appendChild(answerOneEl);
     mainDivEl.appendChild(answerTwoEl);
     mainDivEl.appendChild(answerThreeEl);
     mainDivEl.appendChild(answerFourEl);
         startButtonEl.setAttribute("style", "height: 50px; width: 300px; background-color: lightblue;");//modify button style
         startButtonEl.textContent = "Start The Quiz";//Set The text of the button
+        answerOneEl.setAttribute("style", "display: block; height: 50px; width: 300px; background-color: lightblue; margin-left: auto; margin-right: auto;");//modify button style
         answerTwoEl.setAttribute("style", "display: block; height: 50px; width: 300px; background-color: lightblue; margin-left: auto; margin-right: auto;");//modify button style
         answerThreeEl.setAttribute("style", "display: block; height: 50px; width: 300px; background-color: lightblue; margin-left:auto; margin-right: auto");//modify button style
         answerFourEl.setAttribute("style", "display: block; height: 50px; width: 300px; background-color: lightblue; margin-left: auto; margin-right: auto");//modify button style
@@ -53,11 +55,12 @@ mainEl.appendChild(mainDivEl);//Add Div in the main tp hold all content
 
 
 //Set time lengths for the quiz
-let totalTimeLeft = 300;//Total Time for quiz in seconds
+let totalTimeLeft = 10;//Total Time for quiz in seconds
 let timeForQuestion = 30;//Total Time for Question In Seconds
+let score = 0;//Score for The Quiz
 
 
-//Define first question
+//Define first question as an object
 let question1 = {
     q: "is the answer Maybe?",
     a: "maybe",
@@ -72,6 +75,7 @@ let questionList = [question1];
 
 
 
+
 function startQuiz()
 {
     //Display The Total Time
@@ -79,19 +83,30 @@ function startQuiz()
 
     //Change Header To Question
     quizRulesEl.textContent = question1.q;
+    
+    //Hide The First Button So User Cant Click On It Anymore
     startButtonEl.style.visibility = "hidden";
 
-    for(let i = 0; i < questionsList.length; i++)
-    {
-
-    }
     
+
+    //Go Through A question
+    answerOneEl.textContent = question1.options[0];
+    answerTwoEl.textContent = question1.options[1];
+    answerThreeEl.textContent = question1.options[2];
+    answerFourEl.textContent = question1.options[3];
+
+    answerOneEl.addEventListener("click", function(){checkAnswer(question1, question1.options[0]);});//Event On Click To Start Quiz
+    answerTwoEl.addEventListener("click", function(){checkAnswer(question1, question1.options[1]);});//Event On Click To Start Quiz
+    answerThreeEl.addEventListener("click", function(){checkAnswer(question1, question1.options[2]);});//Event On Click To Start Quiz
+    answerFourEl.addEventListener("click", function(){checkAnswer(question1, question1.options[3]);});//Event On Click To Start Quiz
+
 
     let timerInteral = setInterval(function(){
 
         //Update The Total Time Of The Quiz
         totalTimeLeft--;
 
+        
 
 
         //Update The Display Time
@@ -110,8 +125,23 @@ function startQuiz()
 }//End StartQuiz()
 
 
-
-function updateQuestion()
+function checkAnswer(problem, answer)
 {
+    if(totalTimeLeft - timeForQuestion === 0)  
+    {
+        console.log
+    } 
 
-}//End updateQuestion()
+    if(answer != problem.a)
+    {
+        totalTimeLeft = totalTimeLeft - 10;
+    }
+    else
+    {
+        score += 10;
+    }
+
+}//End checkAnswer()
+
+
+
