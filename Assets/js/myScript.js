@@ -4,20 +4,22 @@ let timeForQuestion = 30;//Total Time for Question In Seconds
 let score = 0;//Score for The Quiz
 
 
-let listEl = document.querySelector("#buttonList");
+let listEl = document.querySelector("#answerButtons");
 let timerEl = document.getElementById("timer");
+let startEl = document.getElementById("startButton")
+
 let answerValue = "";
+let questionNumber = 0
 let currentId = 0;
 
 //Define first question as an object
 let question1 = {
     q: "is the answer Maybe?",
     a: "maybe",
-    options: [
-        "yes", "no", this.a, "also no"
-    ],
-}
+    options: ["yes", "no", "also no", ],
+};
 
+//Array Of Questions
 let questionList = [question1];
 
 
@@ -54,33 +56,46 @@ function clickHandler(event)
     {
         event.preventDefault();//Stop refresh 
         currentId = parseInt(event.target.parentElement.id);
-        console.log(currentId);
-        if(listEl.children[currentId].firstElementChild.textContent === "START")
-        {
-            startQuiz();
-        }
-        else{
-            
-            answerValue = listEl.children[currentId].firstElementChild.textContent;
-        }
+
+
     }
 }
 
-// listEl.addEventListener("click", function(event){
-//     if(event.target.matches("button"))
-//     {
-//         event.preventDefault();//Stop refresh 
-//         currentId = parseInt(event.target.parentElement.id);
-//         console.log(currentId);
-//         if(listEl.children[currentId].firstElementChild.textContent === "START")
-//         {
-//             startQuiz();
-//         }
-//         else{
-            
-//             answerValue = listEl.children[currentId].firstElementChild.textContent;
-//         }
-//     }
-// });
+function populateMaterial(){
+
+    
+
+    listEl.children[0].firstElementChild.textContent = questionList[questionNumber].options[0];
+    listEl.children[1].firstElementChild.textContent = questionList[questionNumber].options[1];
+    listEl.children[2].firstElementChild.textContent = questionList[questionNumber].options[2];
+    listEl.children[3].firstElementChild.textContent = questionList[questionNumber].options[3];
+
+
+    questionNumber++;
+
+}
 
 listEl.addEventListener("click", clickHandler);
+
+startEl.addEventListener("click", function(){
+
+        event.preventDefault();//Stop Refresher
+        //Hide the start button
+        startEl.style.visibility = "hidden";
+
+        //Unhide the Options for the test
+        for(let i = 0; i < listEl.childElementCount; i++)
+        {
+            //Set Style To Visible
+            listEl.children[i].firstElementChild.style.visibility = "visible";
+            
+
+        }
+
+        populateMaterial();
+        startQuiz();
+});
+
+
+
+
