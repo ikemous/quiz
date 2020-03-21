@@ -2,16 +2,15 @@
 let totalTimeLeft = 10;//Total Time for quiz in seconds
 let timeForQuestion = 30;//Total Time for Question In Seconds
 let score = 0;//Score for The Quiz
+let questionNumber = 0//Number Of Current Question 0 = 1
+let currentId = 0;//Variable Used To count through the buttons
 
-
+//Gather All needed elements
 let listEl = document.querySelector("#answerButtons");
 let timerEl = document.getElementById("timer");
 let startEl = document.getElementById("startButton")
 let displayEl = document.getElementById("display");
 
-let answerValue = "";
-let questionNumber = 0
-let currentId = 0;
 
 //Define first question as an object
 let question1 = {
@@ -70,39 +69,35 @@ function clickHandler(event)
 
 function populateMaterial(){
 
+    //Display The Question
     displayEl.textContent = questionList[questionNumber].q;
     
+    //Pick a Random Number to for the answer to be displayed
     let ranNum = Math.floor(Math.random() * 4);
-    console.log(ranNum);   
+    //Display Random Number In The Button
     listEl.children[ranNum].firstElementChild.textContent = questionList[questionNumber].a;
 
-
-
+    //Go through All The Buttons to Display The Possible Options
     for(let i = 0; i < 4; i++)
     {
+        //Used to assign the last button element
         if(i === 3 && i !== ranNum)
         {
+            //Assign button element the last option
             listEl.children[i].firstElementChild.textContent = questionList[questionNumber].options[2];  
         }
+        //Check if the current number isnt the position of the answer
         else if(i !== ranNum)
         {
+            //Assign button the option
             listEl.children[i].firstElementChild.textContent = questionList[questionNumber].options[i];  
-        }
-        else
-        {
-            console.log("skip");
         }
     }
 
-    // listEl.children[0].firstElementChild.textContent = questionList[questionNumber].options[0];
-    // listEl.children[1].firstElementChild.textContent = questionList[questionNumber].options[1];
-    // listEl.children[2].firstElementChild.textContent = questionList[questionNumber].options[2];
-    // listEl.children[3].firstElementChild.textContent = questionList[questionNumber].options[3];
-
-
+    //Increment Questino Number
     questionNumber++;
 
-}
+}//End pupulateMaterial()
 
 listEl.addEventListener("click", clickHandler);
 
