@@ -7,6 +7,7 @@ let score = 0;//Score for The Quiz
 let listEl = document.querySelector("#answerButtons");
 let timerEl = document.getElementById("timer");
 let startEl = document.getElementById("startButton")
+let displayEl = document.getElementById("display");
 
 let answerValue = "";
 let questionNumber = 0
@@ -16,11 +17,17 @@ let currentId = 0;
 let question1 = {
     q: "is the answer Maybe?",
     a: "maybe",
-    options: ["yes", "no", "also no", ],
+    options: ["yes", "no", "also no"],
+};
+
+let question2 = {
+    q: "This Is Another test Question",
+    a: "This is the right answer",
+    options: ["not the answer", "is the answer not this", "also not the answer"],
 };
 
 //Array Of Questions
-let questionList = [question1];
+let questionList = [question1, question2];
 
 
 
@@ -63,12 +70,34 @@ function clickHandler(event)
 
 function populateMaterial(){
 
+    displayEl.textContent = questionList[questionNumber].q;
     
+    let ranNum = Math.floor(Math.random() * 4);
+    console.log(ranNum);   
+    listEl.children[ranNum].firstElementChild.textContent = questionList[questionNumber].a;
 
-    listEl.children[0].firstElementChild.textContent = questionList[questionNumber].options[0];
-    listEl.children[1].firstElementChild.textContent = questionList[questionNumber].options[1];
-    listEl.children[2].firstElementChild.textContent = questionList[questionNumber].options[2];
-    listEl.children[3].firstElementChild.textContent = questionList[questionNumber].options[3];
+
+
+    for(let i = 0; i < 4; i++)
+    {
+        if(i === 3 && i !== ranNum)
+        {
+            listEl.children[i].firstElementChild.textContent = questionList[questionNumber].options[2];  
+        }
+        else if(i !== ranNum)
+        {
+            listEl.children[i].firstElementChild.textContent = questionList[questionNumber].options[i];  
+        }
+        else
+        {
+            console.log("skip");
+        }
+    }
+
+    // listEl.children[0].firstElementChild.textContent = questionList[questionNumber].options[0];
+    // listEl.children[1].firstElementChild.textContent = questionList[questionNumber].options[1];
+    // listEl.children[2].firstElementChild.textContent = questionList[questionNumber].options[2];
+    // listEl.children[3].firstElementChild.textContent = questionList[questionNumber].options[3];
 
 
     questionNumber++;
