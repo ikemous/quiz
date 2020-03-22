@@ -49,18 +49,19 @@ function init()
 }
 
 listEl.addEventListener("click", function(event){
-    console.log(event.target);
-    console.log(questionList[questionNumber].a)
 
+    //Start Quiz
     if(event.target.matches("button") && event.target.textContent === "START")
     {
         populate();
         startQuiz();
     }
+    //Enter Into High Score
     else if(event.target.textContent === "SUBMIT")
     {
-
+        
     }
+    
     else if(event.target.textContent === questionList[questionNumber].a)
     {
         responseEl.textContent = "CORRECT!";
@@ -86,6 +87,7 @@ listEl.addEventListener("click", function(event){
 function populate()
 {
     listEl.innerHTML = "";
+    responseEl.innerHTML = "";  
     //random number to be assigned the answer
 
     if(questionNumber < questionList.length)
@@ -119,19 +121,26 @@ function populate()
         listEl.appendChild(newDiv);
 
         let promptText = document.createElement("h6");
-        promptText.setAttribute("class", "col-sm-3");
-        promptText.textContent = "YO INITAILS HERE";
+        promptText.setAttribute("class", "col-sm-2");
+        promptText.setAttribute("style", "padding-top: 15px");
+        promptText.textContent = "Enter Initials:";
         newDiv.appendChild(promptText);
 
 
         let scoreInitials = document.createElement("input");
         scoreInitials.type = "text";
+        scoreInitials.placeholder = "AIB";
         scoreInitials.setAttribute("class", "col-sm-6");
         newDiv.appendChild(scoreInitials);
+
+        let blankArea = document.createElement("p");
+        blankArea.setAttribute("class", "col-sm-1");
+        newDiv.appendChild(blankArea);
 
         let submitButton = document.createElement("button");
         submitButton.textContent = "SUBMIT"
         submitButton.setAttribute("class", "col-sm-3");
+        submitButton.style.height = "100%";
         newDiv.appendChild(submitButton);
 
         totalTimeLeft = 1;
@@ -158,117 +167,8 @@ function startQuiz()
             //Stop Doing the loop
             clearInterval(timerInteral);
             
-            questionNumber = questionList.length;
             populate(); 
         }
 
     }, 1000 /* Speed For The Timer = 1 Second*/);
 }//End StartQuiz()
-
-
-
-//#region outAreas
-
-/*
-function checkAnswer(event)
-{
-    if(event.target.matches("button"))
-    {
-        currentId = parseInt(event.target.parentElement.id);
-        console.log(event.target.textContent);
-
-        if(questionNumber >= questionList.length)
-        {
-            alert("Out Of Questions");
-        }
-        else if(event.target.textContent === questionList[questionNumber].a)
-        {
-
-            alert(event.target.textContent + " " + questionList[questionNumber].a + "correct!");
-            populateMaterial();
-        }
-        else if(event.target.textContent !== questionList[questionNumber].a)
-        {
-            alert("correct!");
-            populateMaterial();
-        }
-
-    }
-} */
-
-// function populateMaterial(){
-
-//     //Display The Question
-//     displayEl.textContent = questionList[questionNumber].q;
-    
-//     //Pick a Random Number to for the answer to be displayed
-//     let ranNum = Math.floor(Math.random() * 4);
-//     //Display Random Number In The Button
-//     listEl.children[ranNum].firstElementChild.textContent = questionList[questionNumber].a;
-
-//     //Go through All The Buttons to Display The Possible Options
-//     for(let i = 0; i < 4; i++)
-//     {
-//         //Used to assign the last button element
-//         if(i === 3 && i !== ranNum)
-//         {
-//             //Assign button element the last option
-//             listEl.children[i].firstElementChild.textContent = questionList[questionNumber].options[2];  
-//         }
-//         //Check if the current number isnt the position of the answer
-//         else if(i !== ranNum)
-//         {
-//             //Assign button the option
-//             listEl.children[i].firstElementChild.textContent = questionList[questionNumber].options[i];  
-//         }
-//     }
-
-//     //Increment Questino Number
-//     questionNumber++;
-
-// }//End pupulateMaterial()
-
-// listEl.addEventListener("click", checkAnswer);
-
-// startEl.addEventListener("click", function(event){
-
-//         event.preventDefault();//Stop Refresher
-//         //Hide the start button
-//         startEl.style.visibility = "hidden";
-
-//         //Unhide the Options for the test
-//         for(let i = 0; i < listEl.childElementCount; i++)
-//         {
-//             //Set Style To Visible
-//             listEl.children[i].firstElementChild.style.visibility = "visible";
-            
-
-//         }
-
-//         // populateMaterial();
-//         startQuiz();
-// });
-
-    
-/*
-startEl.addEventListener("click", function(){
-
-    event.preventDefault();//Stop Refresher
-    //Hide the start button
-    startEl.style.visibility = "hidden";
-
-    //Unhide the Options for the test
-    for(let i = 0; i < listEl.childElementCount; i++)
-    {
-        //Set Style To Visible
-        listEl.children[i].firstElementChild.style.visibility = "visible";
-        
-
-    }
-
-    populateMaterial();
-    startQuiz();
-});*/
-
-
-//#endregion outAreas
