@@ -2,8 +2,8 @@
 
 
 //Set time lengths for the quiz
-let totalTimeLeft = 300;//Total Time for quiz in seconds
-let timeForQuestion = 30;//Total Time for Question In Seconds
+let totalTimeLeft = 100;//Total Time for quiz in seconds
+const PENALTY = 10;
 let score = 0;//Score for The Quiz
 let questionNumber = 0//Number Of Current Question 0 = 1
 let currentId = 0;//Variable Used To count through the buttons
@@ -48,27 +48,37 @@ function init()
 }
 
 listEl.addEventListener("click", function(event){
-    if(event.target.matches("button"))
-    {
-        if(event.target.textContent === "START")
-        {
-            listEl.innerHTML = "";
-            startQuiz();
-            populate();
-        }
-    }
-    else if(event.target.textContent == questionList[questionNumber].a)
-    {
+    console.log(event.target);
+    console.log(questionList[questionNumber].a)
 
+    if(event.target.matches("button") && event.target.textContent === "START")
+    {
+            populate();
+            startQuiz();
+    }
+    else if(event.target.textContent === questionList[questionNumber].a)
+    {
+        questionNumber++;
+        populate();
     }
     else
     {
-
+        let timeAfterPen = totalTimeLeft - PENALTY;
+        if(timeAfterPen <= 0)
+        {
+            totalTimeLeft = 1;
+        }
+        else
+        {
+            totalTimeLeft -= PENALTY;
+        }
     }
 });
 
 function populate()
 {
+    listEl.innerHTML = "";
+    displayEl.textContent = questionList[questionNumber].q;
     //random number to be assigned the answer
     let randomNumber = Math.floor(Math.random() * 4);
     let optionNumber = 0;
