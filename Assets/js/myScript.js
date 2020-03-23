@@ -42,7 +42,6 @@ init();
 function init()
 {
     highScoreList = JSON.parse(localStorage.getItem("scoreList"));
-    
     displayEl.textContent = "!!!Javascript Quiz!!!";
     questionNumber = 0;
 
@@ -61,37 +60,29 @@ function init()
 
 listEl.addEventListener("click", function(event){
 
-    if(event.target.matches("button")) 
-    {
-        //Start Quiz
-        if(event.target.textContent === "START")
+        switch(event.target.matches("button")) 
         {
-            populate();
-            startQuiz();
+            case event.target.textContent === "START":
+                populate();
+                startQuiz();
+                break;
+            case event.target.textContent === "SUBMIT":
+                storeScoreBoard();
+                loadScoreBoard();
+                break;
+            case event.target.textContent === "CLEAR":
+                clearScore();
+                loadScoreBoard();
+                break;
+            case event.target.textContent === "RETURN":
+                listEl.innerHTML = "";
+                init();
+                break;
+            default:
+                checkAnswer(event);
+                populate(); 
         }
-        //Enter Into High Score
-        else if(event.target.textContent === "SUBMIT")
-        {
-            storeScoreBoard();
-            loadScoreBoard();
-
-        }
-        else if(event.target.textContent === "CLEAR")
-        {
-            clearScore();
-            loadScoreBoard();
-        }
-        else if(event.target.textContent === "RETURN")
-        {
-            listEl.innerHTML = "";
-            init();
-        }
-        else
-        {
-            checkAnswer(event);
-            populate(); 
-        }
-    }
+        
 });
 
 function populate()
