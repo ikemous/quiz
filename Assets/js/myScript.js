@@ -7,6 +7,8 @@ const PENALTY = 10;
 let score = 0;//Score for The Quiz
 let questionNumber = 0;//Number Of Current Question 0 = 1
 let currentId = 0;//Variable Used To count through the buttons
+let highScoreList = [];
+let timerInterval;
 
 //Gather All needed elements
 let listEl = document.getElementById("buttons");
@@ -24,7 +26,7 @@ let question1 = {
 
 let question2 = {
     q: "This Is Another test Question",
-    a: "This is the right answer",
+    a: "This is the right answsser",
     options: ["not the answer", "is the answer not this", "also not the answer"],
 };
 
@@ -50,36 +52,50 @@ function init()
 
 listEl.addEventListener("click", function(event){
 
-    //Start Quiz
-    if(event.target.matches("button") && event.target.textContent === "START")
+    if(event.target.matches("button"))
     {
-        populate();
-        startQuiz();
-    }
-    //Enter Into High Score
-    else if(event.target.textContent === "SUBMIT")
-    {
-        
-    }
-    
-    else if(event.target.textContent === questionList[questionNumber].a)
-    {
-        responseEl.textContent = "CORRECT!";
-        questionNumber++;
-        populate(); 
-    }
-    else
-    {
-        
-        responseEl.textContent = "BOOO YOU SUK!";
-        let timeAfterPen = totalTimeLeft - PENALTY;
-        if(timeAfterPen <= 0)
+        //Start Quiz
+        if(event.target.textContent === "START")
         {
-            totalTimeLeft = 1;
+            populate();
+            startQuiz();
+        }
+        //Enter Into High Score
+        else if(event.target.textContent === "SUBMIT")
+        {
+            storeScoreBoard();
+            
+            listEl.innerHTML = "";
+            responseEl.innerHTML = "";  
+            displayEl.textContent = "Score Board!";  
+            for(let i  = 0; i < questionList.length; i++)
+            {
+                let newDiv = document.createElement("div");
+                newDiv.setAttribute("class", "row");
+                listEl.appendChild(newDiv);
+
+                let userInitials = document.createElement("li");
+            }
+        }
+        else if(event.target.textContent === questionList[questionNumber].a)
+        {
+            responseEl.textContent = "CORRECT!";
+            questionNumber++;
+            populate(); 
         }
         else
         {
-            totalTimeLeft -= PENALTY;
+            
+            responseEl.textContent = "BOOO YOU SUK!";
+            let timeAfterPen = totalTimeLeft - PENALTY;
+            if(timeAfterPen <= 0)
+            {
+                totalTimeLeft = 1;
+            }
+            else
+            {
+                totalTimeLeft -= PENALTY;
+            }
         }
     }
 });
@@ -115,8 +131,10 @@ function populate()
     }
     else
     {
+        
+
         displayEl.textContent = "Results!";
-        let newDiv = document.createElement("div");
+        let newDiv = document.createElement("li");
         newDiv.setAttribute("class", "row");
         listEl.appendChild(newDiv);
 
@@ -131,6 +149,7 @@ function populate()
         scoreInitials.type = "text";
         scoreInitials.placeholder = "AIB";
         scoreInitials.setAttribute("class", "col-sm-6");
+        scoreInitials.setAttribute("id", "userInitials");
         newDiv.appendChild(scoreInitials);
 
         let blankArea = document.createElement("p");
@@ -143,7 +162,9 @@ function populate()
         submitButton.style.height = "100%";
         newDiv.appendChild(submitButton);
 
-        totalTimeLeft = 1;
+        
+        //Stop Doing the loop
+        clearInterval(timerInterval);
 
     }
 
@@ -152,7 +173,7 @@ function populate()
 function startQuiz()
 {
 
-    let timerInteral = setInterval(function(){
+    timerInterval = setInterval(function(){
 
         //Update The Total Time Of The Quiz
         totalTimeLeft--;
@@ -165,10 +186,33 @@ function startQuiz()
         {
             
             //Stop Doing the loop
-            clearInterval(timerInteral);
+            clearInterval(timerInterval);
             
             populate(); 
         }
 
     }, 1000 /* Speed For The Timer = 1 Second*/);
 }//End StartQuiz()
+
+
+function storeScoreBoard()
+{
+    let theInitials = document.getElementById("userInitials").value;
+
+        if(theInitials === undefined || theInitials === "")
+        {
+            alert("You must put something in the box");
+            return;
+        }
+        
+
+    let tempObj = {
+        quizer: theInitials,
+        quizScore: totalTimeLeft
+    };
+
+    highScoreList.push(tempObj);
+
+    localStorage.setItem("scoreList", JSON.stringify(highScoreList));
+
+}//End storeScoreBoard()
