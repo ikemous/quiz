@@ -63,8 +63,7 @@ listEl.addEventListener("click", function(event){
 
     if(event.target.matches("button"))
     {
-        let buttonText = event.target.textContent;
-        switch(buttonText) 
+        switch(event.target.textContent) 
         {
             case "START":
                 populate();
@@ -87,7 +86,6 @@ listEl.addEventListener("click", function(event){
                 populate(); 
         }
     }
-
 });
 
 function populate()
@@ -96,56 +94,13 @@ function populate()
 
     if(questionNumber < questionList.length)
     {
-        
-        let randomNumber = Math.floor(Math.random() * 4);
-        let optionNumber = 0;
-        displayEl.textContent = questionList[questionNumber].q;
-
-        for(let i = 0; i < 4; i++)
-        {
-            let newButton = document.createElement("button")
-            newButton.setAttribute("data-number", i);
-            if(i === randomNumber)
-            {
-                newButton.textContent = questionList[questionNumber].a;
-            }
-            else
-            {
-                newButton.textContent = questionList[questionNumber].options[optionNumber];
-                optionNumber++;
-            }
-            listEl.appendChild(newButton);
-        }
+        loadOptions();
     }
     else
     {
-        
-
-        displayEl.textContent = "Results!";
-        let newDiv = document.createElement("li");
-        newDiv.setAttribute("class", "row");
-        listEl.appendChild(newDiv);
-
-        let promptText = document.createElement("h6");
-        promptText.textContent = "Enter Initials:";
-        newDiv.appendChild(promptText);
-
-
-        let scoreInitials = document.createElement("input");
-        scoreInitials.type = "text";
-        scoreInitials.placeholder = "AIB";
-        scoreInitials.setAttribute("style", "padding-right: 400px;");
-        scoreInitials.setAttribute("id", "userInitials");
-        newDiv.appendChild(scoreInitials);
-
-        let submitButton = document.createElement("button");
-        submitButton.textContent = "SUBMIT";
-        newDiv.appendChild(submitButton);
-
-        
+        loadResults();
         //Stop Doing the loop
         clearInterval(timerInterval);
-
     }
 
 }
@@ -292,4 +247,56 @@ function loadStartMenu()
     newButton.textContent = "START";
     newButton.setAttribute("data-number", 0);
     listEl.appendChild(newButton);
+}
+
+function loadResults()
+{
+    
+    displayEl.textContent = "Results!";
+    let newDiv = document.createElement("li");
+    newDiv.setAttribute("class", "row");
+    listEl.appendChild(newDiv);
+
+    let promptText = document.createElement("h6");
+    promptText.textContent = "Enter Initials:";
+    newDiv.appendChild(promptText);
+
+
+    let scoreInitials = document.createElement("input");
+    scoreInitials.type = "text";
+    scoreInitials.placeholder = "AIB";
+    scoreInitials.setAttribute("style", "padding-right: 400px;");
+    scoreInitials.setAttribute("id", "userInitials");
+    newDiv.appendChild(scoreInitials);
+
+    let submitButton = document.createElement("button");
+    submitButton.textContent = "SUBMIT";
+    newDiv.appendChild(submitButton);
+
+    
+    //Stop Doing the loop
+    clearInterval(timerInterval);
+}
+
+function loadOptions()
+{
+    let randomNumber = Math.floor(Math.random() * 4);
+    let optionNumber = 0;
+    displayEl.textContent = questionList[questionNumber].q;
+
+    for(let i = 0; i < 4; i++)
+    {
+        let newButton = document.createElement("button")
+        newButton.setAttribute("data-number", i);
+        if(i === randomNumber)
+        {
+            newButton.textContent = questionList[questionNumber].a;
+        }
+        else
+        {
+            newButton.textContent = questionList[questionNumber].options[optionNumber];
+            optionNumber++;
+        }
+        listEl.appendChild(newButton);
+    }
 }
