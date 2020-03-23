@@ -40,6 +40,12 @@ init();
 
 function init()
 {
+    highScoreList = JSON.parse(localStorage.getItem("scoreList"));
+    if(highScoreList === null)
+    {
+        highScoreList = [];
+    }
+
     if(listEl.innerHTML === "")
     {
         let newButton = document.createElement("button")
@@ -52,7 +58,7 @@ function init()
 
 listEl.addEventListener("click", function(event){
 
-    if(event.target.matches("button"))
+    if(event.target.matches("button")) 
     {
         //Start Quiz
         if(event.target.textContent === "START")
@@ -68,14 +74,67 @@ listEl.addEventListener("click", function(event){
             listEl.innerHTML = "";
             responseEl.innerHTML = "";  
             displayEl.textContent = "Score Board!";  
-            for(let i  = 0; i < questionList.length; i++)
+
+            for(let i  = 0; i < highScoreList.length; i++)
             {
-                let newDiv = document.createElement("div");
-                newDiv.setAttribute("class", "row");
-                listEl.appendChild(newDiv);
+                // let newDiv = document.createElement("div");
+                // listEl.appendChild(newDiv);
 
                 let userInitials = document.createElement("li");
+                userInitials.textContent = highScoreList[i].quizer + ": " + highScoreList[i].quizScore;
+                listEl.appendChild(userInitials);
             }
+
+            let newDiv = document.createElement("div");
+            newDiv.setAttribute("class", "row");
+            listEl.appendChild(newDiv);
+
+            let clearButton = document.createElement("button");
+            clearButton.textContent = "CLEAR";
+            newDiv.appendChild(clearButton);
+
+            let returnButton = document.createElement("button");
+            returnButton.textContent = "RETURN";
+            newDiv.appendChild(returnButton);
+
+
+        }
+        else if(event.target.textContent === "CLEAR")
+        {
+            localStorage.clear();
+            highScoreList = [];
+            listEl.innerHTML = "";
+            responseEl.innerHTML = "";  
+            displayEl.textContent = "Score Board!";  
+
+            for(let i  = 0; i < highScoreList.length; i++)
+            {
+                // let newDiv = document.createElement("div");
+                // listEl.appendChild(newDiv);
+
+                let userInitials = document.createElement("li");
+                userInitials.textContent = highScoreList[i].quizer + ": " + highScoreList[i].quizScore;
+                listEl.appendChild(userInitials);
+            }
+
+            let newDiv = document.createElement("div");
+            newDiv.setAttribute("class", "row");
+            listEl.appendChild(newDiv);
+
+            let clearButton = document.createElement("button");
+            clearButton.textContent = "CLEAR";
+            newDiv.appendChild(clearButton);
+
+            let returnButton = document.createElement("button");
+            returnButton.textContent = "RETURN";
+            newDiv.appendChild(returnButton);
+        }
+        else if(event.target.textContent === "RETURN")
+        {
+            listEl.innerHTML = "";
+            displayEl.textContent = "!!!Javascript Quiz!!!";
+            questionNumber = 0;
+            init();
         }
         else if(event.target.textContent === questionList[questionNumber].a)
         {
@@ -139,8 +198,8 @@ function populate()
         listEl.appendChild(newDiv);
 
         let promptText = document.createElement("h6");
-        promptText.setAttribute("class", "col-sm-2");
-        promptText.setAttribute("style", "padding-top: 15px");
+        // promptText.setAttribute("class", "col-sm-2");
+        // promptText.setAttribute("style", "padding-top: 15px");
         promptText.textContent = "Enter Initials:";
         newDiv.appendChild(promptText);
 
@@ -148,18 +207,19 @@ function populate()
         let scoreInitials = document.createElement("input");
         scoreInitials.type = "text";
         scoreInitials.placeholder = "AIB";
-        scoreInitials.setAttribute("class", "col-sm-6");
+        // scoreInitials.setAttribute("class", "col-sm-6");
+        scoreInitials.setAttribute("style", "padding-right: 400px;");
         scoreInitials.setAttribute("id", "userInitials");
         newDiv.appendChild(scoreInitials);
 
-        let blankArea = document.createElement("p");
-        blankArea.setAttribute("class", "col-sm-1");
-        newDiv.appendChild(blankArea);
+        // let blankArea = document.createElement("p");
+        // // blankArea.setAttribute("class", "col-sm-1");
+        // newDiv.appendChild(blankArea);
 
         let submitButton = document.createElement("button");
         submitButton.textContent = "SUBMIT"
-        submitButton.setAttribute("class", "col-sm-3");
-        submitButton.style.height = "100%";
+        // submitButton.setAttribute("class", "col-sm-3");
+        // submitButton.style.height = "100%";
         newDiv.appendChild(submitButton);
 
         
