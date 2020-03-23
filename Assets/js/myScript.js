@@ -10,6 +10,7 @@ let currentId = 0;//Variable Used To count through the buttons
 let highScoreList = [];
 let timerInterval;
 let displayInterval;
+let displayTime = 2;
 
 //Gather All needed elements
 let listEl = document.getElementById("buttons");
@@ -60,21 +61,24 @@ function init()
 
 listEl.addEventListener("click", function(event){
 
-        switch(event.target.matches("button")) 
+    if(event.target.matches("button"))
+    {
+        let buttonText = event.target.textContent;
+        switch(buttonText) 
         {
-            case event.target.textContent === "START":
+            case "START":
                 populate();
                 startQuiz();
                 break;
-            case event.target.textContent === "SUBMIT":
+            case "SUBMIT":
                 storeScoreBoard();
                 loadScoreBoard();
                 break;
-            case event.target.textContent === "CLEAR":
+            case "CLEAR":
                 clearScore();
                 loadScoreBoard();
                 break;
-            case event.target.textContent === "RETURN":
+            case "RETURN":
                 listEl.innerHTML = "";
                 init();
                 break;
@@ -82,7 +86,8 @@ listEl.addEventListener("click", function(event){
                 checkAnswer(event);
                 populate(); 
         }
-        
+    }
+
 });
 
 function populate()
@@ -102,7 +107,7 @@ function populate()
             newButton.setAttribute("data-number", i);
             if(i === randomNumber)
             {
-                newButton.textContent = questionList[questionNumber].a
+                newButton.textContent = questionList[questionNumber].a;
             }
             else
             {
@@ -253,7 +258,12 @@ function checkAnswer(event)
 
 function startAnswerResponse(showThis)
 {
-    let displayTime = 2;
+
+    
+    //Stop Doing the loop
+    clearInterval(displayInterval);
+    
+    displayTime = 2;
 
     responseEl.textContent = showThis;
 
@@ -274,4 +284,12 @@ function startAnswerResponse(showThis)
         }
 
     }, 1000 /* Speed For The Timer = 1 Second*/);
+}
+
+function loadStartMenu()
+{
+    let newButton = document.createElement("button")
+    newButton.textContent = "START";
+    newButton.setAttribute("data-number", 0);
+    listEl.appendChild(newButton);
 }
