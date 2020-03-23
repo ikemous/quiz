@@ -9,6 +9,7 @@ let questionNumber = 0;//Number Of Current Question 0 = 1
 let currentId = 0;//Variable Used To count through the buttons
 let highScoreList = [];
 let timerInterval;
+let displayInterval;
 
 //Gather All needed elements
 let listEl = document.getElementById("buttons");
@@ -41,11 +42,14 @@ init();
 function init()
 {
     highScoreList = JSON.parse(localStorage.getItem("scoreList"));
+    
+    displayEl.textContent = "!!!Javascript Quiz!!!";
+    questionNumber = 0;
+
     if(highScoreList === null)
     {
         highScoreList = [];
     }
-
     if(listEl.innerHTML === "")
     {
         let newButton = document.createElement("button")
@@ -53,7 +57,6 @@ function init()
         newButton.setAttribute("data-number", 0);
         listEl.appendChild(newButton);
     }
-
 }
 
 listEl.addEventListener("click", function(event){
@@ -70,91 +73,23 @@ listEl.addEventListener("click", function(event){
         else if(event.target.textContent === "SUBMIT")
         {
             storeScoreBoard();
-            
-            listEl.innerHTML = "";
-            responseEl.innerHTML = "";  
-            displayEl.textContent = "Score Board!";  
-
-            for(let i  = 0; i < highScoreList.length; i++)
-            {
-                // let newDiv = document.createElement("div");
-                // listEl.appendChild(newDiv);
-
-                let userInitials = document.createElement("li");
-                userInitials.textContent = highScoreList[i].quizer + ": " + highScoreList[i].quizScore;
-                listEl.appendChild(userInitials);
-            }
-
-            let newDiv = document.createElement("div");
-            newDiv.setAttribute("class", "row");
-            listEl.appendChild(newDiv);
-
-            let clearButton = document.createElement("button");
-            clearButton.textContent = "CLEAR";
-            newDiv.appendChild(clearButton);
-
-            let returnButton = document.createElement("button");
-            returnButton.textContent = "RETURN";
-            newDiv.appendChild(returnButton);
-
+            loadScoreBoard();
 
         }
         else if(event.target.textContent === "CLEAR")
         {
-            localStorage.clear();
-            highScoreList = [];
-            listEl.innerHTML = "";
-            responseEl.innerHTML = "";  
-            displayEl.textContent = "Score Board!";  
-
-            for(let i  = 0; i < highScoreList.length; i++)
-            {
-                // let newDiv = document.createElement("div");
-                // listEl.appendChild(newDiv);
-
-                let userInitials = document.createElement("li");
-                userInitials.textContent = highScoreList[i].quizer + ": " + highScoreList[i].quizScore;
-                listEl.appendChild(userInitials);
-            }
-
-            let newDiv = document.createElement("div");
-            newDiv.setAttribute("class", "row");
-            listEl.appendChild(newDiv);
-
-            let clearButton = document.createElement("button");
-            clearButton.textContent = "CLEAR";
-            newDiv.appendChild(clearButton);
-
-            let returnButton = document.createElement("button");
-            returnButton.textContent = "RETURN";
-            newDiv.appendChild(returnButton);
+            clearScore();
+            loadScoreBoard();
         }
         else if(event.target.textContent === "RETURN")
         {
             listEl.innerHTML = "";
-            displayEl.textContent = "!!!Javascript Quiz!!!";
-            questionNumber = 0;
             init();
-        }
-        else if(event.target.textContent === questionList[questionNumber].a)
-        {
-            responseEl.textContent = "CORRECT!";
-            questionNumber++;
-            populate(); 
         }
         else
         {
-            
-            responseEl.textContent = "BOOO YOU SUK!";
-            let timeAfterPen = totalTimeLeft - PENALTY;
-            if(timeAfterPen <= 0)
-            {
-                totalTimeLeft = 1;
-            }
-            else
-            {
-                totalTimeLeft -= PENALTY;
-            }
+            checkAnswer(event);
+            populate(); 
         }
     }
 });
@@ -162,8 +97,6 @@ listEl.addEventListener("click", function(event){
 function populate()
 {
     listEl.innerHTML = "";
-    responseEl.innerHTML = "";  
-    //random number to be assigned the answer
 
     if(questionNumber < questionList.length)
     {
@@ -198,8 +131,6 @@ function populate()
         listEl.appendChild(newDiv);
 
         let promptText = document.createElement("h6");
-        // promptText.setAttribute("class", "col-sm-2");
-        // promptText.setAttribute("style", "padding-top: 15px");
         promptText.textContent = "Enter Initials:";
         newDiv.appendChild(promptText);
 
@@ -207,19 +138,12 @@ function populate()
         let scoreInitials = document.createElement("input");
         scoreInitials.type = "text";
         scoreInitials.placeholder = "AIB";
-        // scoreInitials.setAttribute("class", "col-sm-6");
         scoreInitials.setAttribute("style", "padding-right: 400px;");
         scoreInitials.setAttribute("id", "userInitials");
         newDiv.appendChild(scoreInitials);
 
-        // let blankArea = document.createElement("p");
-        // // blankArea.setAttribute("class", "col-sm-1");
-        // newDiv.appendChild(blankArea);
-
         let submitButton = document.createElement("button");
-        submitButton.textContent = "SUBMIT"
-        // submitButton.setAttribute("class", "col-sm-3");
-        // submitButton.style.height = "100%";
+        submitButton.textContent = "SUBMIT";
         newDiv.appendChild(submitButton);
 
         
@@ -276,3 +200,87 @@ function storeScoreBoard()
     localStorage.setItem("scoreList", JSON.stringify(highScoreList));
 
 }//End storeScoreBoard()
+
+function clearScore()
+{
+    localStorage.clear();
+    highScoreList = [];
+}//End clearScore()
+
+function loadScoreBoard()
+{
+    
+    listEl.innerHTML = "";
+    responseEl.innerHTML = ""; 
+    displayEl.textContent = "Score Board!";  
+
+    for(let i  = 0; i < highScoreList.length; i++)
+    {
+        let userInitials = document.createElement("li");
+        userInitials.textContent = highScoreList[i].quizer + ": " + highScoreList[i].quizScore;
+        listEl.appendChild(userInitials);
+    }
+
+    let newDiv = document.createElement("div");
+    newDiv.setAttribute("class", "row");
+    listEl.appendChild(newDiv);
+
+    let clearButton = document.createElement("button");
+    clearButton.textContent = "CLEAR";
+    newDiv.appendChild(clearButton);
+
+    let returnButton = document.createElement("button");
+    returnButton.textContent = "RETURN";
+    newDiv.appendChild(returnButton);
+
+}
+
+function checkAnswer(event)
+{
+    if(event.target.textContent === questionList[questionNumber].a)
+    {
+        // responseEl.textContent = "CORRECT!";
+        startAnswerResponse("CORRECT");
+        questionNumber++;
+    }
+    else
+    {
+        // responseEl.textContent = "CORRECT!";
+        startAnswerResponse("INCORRECT");
+        let timeAfterPen = totalTimeLeft - PENALTY;
+        if(timeAfterPen <= 0)
+        {
+            totalTimeLeft = 1;
+        }
+        else
+        {
+            totalTimeLeft -= PENALTY;
+        }
+    }
+
+}
+
+function startAnswerResponse(showThis)
+{
+    let displayTime = 2;
+
+    responseEl.textContent = showThis;
+
+    displayInterval = setInterval(function(){
+
+        //Update The Total Time Of The Quiz
+        displayTime--;
+
+        //Check If Time Is Up
+        if(displayTime <= 0)
+        {
+            
+            //Stop Doing the loop
+            clearInterval(displayInterval);
+
+            responseEl.innerHTML = "";
+            
+        }
+
+    }, 1000 /* Speed For The Timer = 1 Second*/);
+}
