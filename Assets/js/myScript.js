@@ -16,6 +16,7 @@ let listEl = document.getElementById("buttons");//Element for changing buttons a
 let timerEl = document.getElementById("timer");//Span for changing timer
 let displayEl = document.getElementById("display");//Display To show topics
 let responseEl = document.getElementById("response");//El to show tell user if answer was correct or incorrect
+let scoreBoardEl = document.getElementById("scoreBoard");
 
 
 //Define All Questions
@@ -61,14 +62,22 @@ function init()
     
     //Change The Display To The Quiz Title
     displayEl.textContent = "!!!Javascript Quiz!!!";
-    //Make Question Number = 0
+    //Reset Question Number = 0
     questionNumber = 0;
+    //Reset Quiz Time
+    totalTimeLeft = 100;
+
+    //Clear Any Times 
+    clearInterval(timerInterval);
+    clearInterval(displayTime);
 
     //Check If The list HTML is Empty
     if(listEl.innerHTML === "")
     {
         //display a new button
         loadStartButton();
+        //display Default Time
+        timerEl.textContent = totalTimeLeft;
     }
 }//End init()
 
@@ -91,8 +100,16 @@ listEl.addEventListener("click", function(event){
                 break;
             //Button Says Submit
             case "SUBMIT":
-                storeScoreBoard();
-                loadScoreBoard();
+                if(document.getElementById("userInitials").value === null || document.getElementById("userInitials").value === "")//Check User Input
+                {
+                    alert("Silly goose, you need to type something in");
+                    break;
+                }
+                else
+                {
+                    storeScoreBoard();
+                    loadScoreBoard();
+                }
                 break;
             //Button Says Clear
             case "CLEAR":
@@ -158,8 +175,8 @@ function startQuiz()
             
             //Stop Timer Loop
             clearInterval(timerInterval);
-            
-            populate(); 
+            questionNumber = questionList.length;
+            populate();
         }
 
     }, 1000 /* Speed For The Timer = 1 Second*/);
@@ -178,7 +195,7 @@ function storeScoreBoard()
     if(theInitials === undefined || theInitials === "")
     {
         alert("You must put something in the box");
-        return;
+        return null;
     }
         
     //Store Information to an object
@@ -218,7 +235,7 @@ function loadScoreBoard()
     responseEl.innerHTML = ""; 
     
     //Display Page Subject
-    displayEl.textContent = "Score Board!";  
+    displayEl.textContent = "Score Board!"; 
 
     //Filter Through Scores
     for(let i  = 0; i < highScoreList.length; i++)
@@ -301,6 +318,17 @@ function startAnswerResponse(showThis)
     //Display Text
     responseEl.textContent = showThis;
 
+    if(showThis === "INCORRECT")
+    {
+        responseEl.setAttribute("style", "border-top: solid red; color: red");
+
+    }
+    else
+    {
+        responseEl.setAttribute("style", "border-top: solid green; color: green;");
+    }
+    responseEl.style.fontWeight = "bold";
+
     //Interval for how long the text will be displayed
     displayInterval = setInterval(function(){
 
@@ -315,6 +343,9 @@ function startAnswerResponse(showThis)
             clearInterval(displayInterval);
             //Clear Text
             responseEl.innerHTML = "";
+            
+            responseEl.style.borderTop = "";
+            responseEl.style.fontWeight = "";
             
         }
 
@@ -398,8 +429,12 @@ function loadOptions()
             newButton.textContent = questionList[questionNumber].options[optionNumber];//Give Button a text of one of the question options
             optionNumber++;//Increase Option number for next button
         }
+        newButton.style.marginTop = "5px";
         listEl.appendChild(newButton);//Add Button To HTML
     }
 }//End loadOptions()
+
+scoreBoardEl.addEventListener("click", loadScoreBoard);
+
 
 //#endregion functions
