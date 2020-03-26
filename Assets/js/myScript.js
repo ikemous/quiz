@@ -32,9 +32,33 @@ let question2 = {//Second Question
     options: ["not the answer", "is the answer not this", "also not the answer"],//Possible Questions
 };
 
-//Array To Hold All Questions
-let questionList = [question1, question2];
+let question3 = {//third Question
+    q: "Which Battle Royal Just Came Out?",//Question
+    a: "Warzone",//Answer
+    options: ["PUBG", "APEX", "Fortnite"],//Possible Questions
+};
 
+let question4 = {//Fourth Question
+    q: "Which League Champion Dies And Becomes An Egg?",//Question
+    a: "Anivia",//Answer
+    options: ["Blitzcrank", "Xerath", "Trundle"],//Possible Questions
+};
+
+let question5 = {//Fifth Question
+    q: "Which Isn't A Video Game Streaming Platform?",//Question
+    a: "Instagram",//Answer
+    options: ["Facebook", "Mixer", "Twitch"],//Possible Questions
+};
+
+let question6 = {//Sixth Question
+    q: "What Is Does 2+2 Equal?",//Question
+    a: "Fish",//Answer
+    options: ["Two", "Three", "Juan"],//Possible Questions
+};
+
+
+//Array To Hold All Questions
+let questionList = [question1, question2, question3, question4, question5, question6];
 
 //#endregion variables
 
@@ -190,13 +214,6 @@ function storeScoreBoard()
 {
     //Grab user tester Initials
     let theInitials = document.getElementById("userInitials").value;
-
-    //Check If There is User Input
-    if(theInitials === undefined || theInitials === "")
-    {
-        alert("You must put something in the box");
-        return null;
-    }
         
     //Store Information to an object
     let tempObj = {
@@ -237,13 +254,21 @@ function loadScoreBoard()
     //Display Page Subject
     displayEl.textContent = "Score Board!"; 
 
-    //Filter Through Scores
+    //Display Each Score Stored
     for(let i  = 0; i < highScoreList.length; i++)
     {
         //Display Users Score
-        let userInitials = document.createElement("li");//Create List Element
-        userInitials.textContent = highScoreList[i].quizer + ": " + highScoreList[i].quizScore;//Give Element text
-        listEl.appendChild(userInitials);//Add Element To HTML
+        let scoreHolder = document.createElement("li");//Create List Element to hold user score and initials
+        listEl.appendChild(scoreHolder);//put list item in HTML
+        let userInitials = document.createElement("h4");//create header element for user initials
+        userInitials.textContent = highScoreList[i].quizer + " - ";//give element text
+        scoreHolder.appendChild(userInitials);//put el inside list item element
+        let userScore = document.createElement("h4");//Create header element for user score
+        userScore.textContent = highScoreList[i].quizScore;//give element score text
+        scoreHolder.appendChild(userScore);//Put score in list item
+
+        
+
     }
 
     //Make a spot to insert buttons
@@ -318,14 +343,16 @@ function startAnswerResponse(showThis)
     //Display Text
     responseEl.textContent = showThis;
 
+    //user clicked on incorrect answer
     if(showThis === "INCORRECT")
     {
-        responseEl.setAttribute("style", "border-top: solid red; color: red");
+        responseEl.setAttribute("style", "border-top: solid red; color: red");//set wrong answer styles
 
     }
+    //user clicked on right answer
     else
     {
-        responseEl.setAttribute("style", "border-top: solid green; color: green;");
+        responseEl.setAttribute("style", "border-top: solid green; color: green;");//Set right answer styles
     }
     responseEl.style.fontWeight = "bold";
 
@@ -341,9 +368,8 @@ function startAnswerResponse(showThis)
             
             //Stop Doing the loop
             clearInterval(displayInterval);
-            //Clear Text
+            //Clear Text and styles
             responseEl.innerHTML = "";
-            
             responseEl.style.borderTop = "";
             responseEl.style.fontWeight = "";
             
@@ -361,7 +387,6 @@ function loadStartButton()
     //Create Start Button
     let newButton = document.createElement("button")//Create Button element
     newButton.textContent = "START";//Give element text
-    newButton.setAttribute("data-number", 0);//give element attribute
     listEl.appendChild(newButton);//Put element inside the HTML
 }//End loadStartButton()
 
@@ -380,7 +405,7 @@ function loadResults()
     listEl.appendChild(newDiv);//Put element inside HTML
 
     //Header To Tell User To Input their initials
-    let promptText = document.createElement("h6");//Create header element
+    let promptText = document.createElement("h4");//Create header element
     promptText.textContent = "Enter Initials:";//Give element Text
     newDiv.appendChild(promptText);//Put element inside HTML
 
@@ -388,12 +413,12 @@ function loadResults()
     let scoreInitials = document.createElement("input");//Create Input Element
     scoreInitials.type = "text";//Give Element Text
     scoreInitials.placeholder = "AIB";//Put Placeholder for an example
-    scoreInitials.setAttribute("style", "padding-right: 400px;");//give input padding for a longer box
     scoreInitials.setAttribute("id", "userInitials");//Give the input an ID for future interaction
     newDiv.appendChild(scoreInitials);//Put input in HTML
 
     //Create Button To Allow User To Submit Initials In ScoreBoard
     let submitButton = document.createElement("button");//create button element
+    submitButton.setAttribute("style", "");
     submitButton.textContent = "SUBMIT";//Give button text
     newDiv.appendChild(submitButton);//Add Button To HTML
     
