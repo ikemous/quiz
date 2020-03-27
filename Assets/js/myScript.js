@@ -15,7 +15,10 @@ let listEl = document.getElementById("information");//Element for changing butto
 let timerEl = document.getElementById("timer");//Span for changing timer
 let displayEl = document.getElementById("display");//Display To show topics
 let responseEl = document.getElementById("response");//El to show tell user if answer was correct or incorrect
-let scoreBoardEl = document.getElementById("scoreBoard");
+let scoreBoardEl = document.getElementById("scoreBoard");//El to load ScoreBoard
+let bellAudio = document.getElementById("bellAudio");//El for correct answer audio
+let fartAudio = document.getElementById("fartAudio");//el for incorrect answer audio
+let cheerAudio = document.getElementById("cheerAudio");//el for incorrect answer audio
 
 
 //Define All Questions
@@ -103,54 +106,6 @@ function init()
         timerEl.textContent = totalTimeLeft;
     }
 }//End init()
-
-//              listEl Event Listener
-//  Purpose: To give purpose to The buttons Populated
-//  Parameters: event action and function to happen during event
-//  Return: None
-listEl.addEventListener("click", function(event){
-
-    //Check if even was a button
-    if(event.target.matches("button"))
-    {
-        //Check Text Of The Button
-        switch(event.target.textContent) 
-        {
-            //Button Says Start
-            case "START":
-                populate();
-                startQuiz();
-                break;
-            //Button Says Submit
-            case "SUBMIT":
-                if(document.getElementById("userInitials").value === null || document.getElementById("userInitials").value === "")//Check User Input
-                {
-                    alert("Silly goose, you need to type something in");
-                    break;
-                }
-                else
-                {
-                    storeScoreBoard();
-                    loadScoreBoard();
-                }
-                break;
-            //Button Says Clear
-            case "CLEAR":
-                clearScore();
-                loadScoreBoard();
-                break;
-            //Buttons Says Return
-            case "RETURN":
-                listEl.innerHTML = "";
-                init();
-                break;
-            //check To See If Button Text is Equal To The Answer
-            default:
-                checkAnswer(event);
-                populate(); 
-        }
-    }
-});//End List El Event Listener
 
 //              populate()
 //  Purpose: Clear List El then check if results or test options need to be loaded
@@ -300,12 +255,14 @@ function startAnswerResponse(showThis)
     if(showThis === "INCORRECT")
     {
         responseEl.setAttribute("style", "border-top: solid red; color: red");//set wrong answer styles
+        fartAudio.play();
 
     }
     //user clicked on right answer
     else
     {
         responseEl.setAttribute("style", "border-top: solid green; color: green;");//Set right answer styles
+        bellAudio.play();
     }
     responseEl.style.fontWeight = "bold";
 
@@ -378,6 +335,9 @@ function loadScoreBoard()
     //Display Page Subject
     displayEl.textContent = "Score Board!"; 
 
+    //Sort Through scoreboard using the compare function
+    highScoreList = highScoreList.sort(compare);
+
     //Display Each Score Stored
     for(let i  = 0; i < highScoreList.length; i++)
     {
@@ -433,6 +393,7 @@ function loadResults()
     //Change Topic of the Page
     displayEl.textContent = "Your Score is: " + totalTimeLeft;
     timerEl.textContent = totalTimeLeft;
+
     //Create a spot for the user to input results
     let newDiv = document.createElement("li");//create new list element
     newDiv.setAttribute("class", "row");//Give element a class from bootstrap
@@ -464,7 +425,85 @@ function loadResults()
 
 }//End loadResults()
 
+
+
+//              compare()
+//  Skeleton of code from https://www.sitepoint.com/sort-an-array-of-objects-in-javascript/
+//  Purpose: compare To Values to help in sorting through an object
+//  Parameters: firstNum and secondNum - The two objects to be compared
+//  Return: comparison - to help move through the array of objects
+function compare(firstNum, secondNum) {
+    //store score object values to be compared
+    const quizScoreOne = firstNum.quizScore;//First Quiz Score
+    const quizScoreTwo = secondNum.quizScore;//Second Quiz Score
+
+    
+  
+    //Compare The Two Values
+    let comparison = 0;//Variable To Indicate where the object stands
+    if (quizScoreOne < quizScoreTwo) //First Score Is less than the next
+      comparison = 1;
+    else if (quizScoreOne > quizScoreTwo)//First score is greater than the next
+      comparison = -1;
+
+    return comparison;
+}//End compare()
+
+
+//             scoreBoardEl Event Listener
+//  Purpose: to give an action event for the scoreboard header
+//  Parameters: "click" event and loadScoreBoardFunction to be called
+//  Return: None
 scoreBoardEl.addEventListener("click", loadScoreBoard);
+
+//              listEl Event Listener
+//  Purpose: To give purpose to The buttons Populated
+//  Parameters: event action and function to happen during event
+//  Return: None
+listEl.addEventListener("click", function(event){
+
+    //Check if even was a button
+    if(event.target.matches("button"))
+    {
+        //Check Text Of The Button
+        switch(event.target.textContent) 
+        {
+            //Button Says Start
+            case "START":
+                populate();
+                startQuiz();
+                break;
+            //Button Says Submit
+            case "SUBMIT":
+                if(document.getElementById("userInitials").value === null || document.getElementById("userInitials").value === "")//Check User Input
+                {
+                    alert("Silly goose, you need to type something in");
+                    break;
+                }
+                else
+                {
+                    cheerAudio.play();
+                    storeScoreBoard();
+                    loadScoreBoard();
+                }
+                break;
+            //Button Says Clear
+            case "CLEAR":
+                clearScore();
+                loadScoreBoard();
+                break;
+            //Buttons Says Return
+            case "RETURN":
+                listEl.innerHTML = "";
+                init();
+                break;
+            //check To See If Button Text is Equal To The Answer
+            default:
+                checkAnswer(event);
+                populate(); 
+        }
+    }
+});//End List El Event Listener
 
 
 //#endregion functions
