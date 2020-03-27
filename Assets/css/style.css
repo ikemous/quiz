@@ -1,24 +1,48 @@
+/* 
+    body tag
+    Purpose: Change The Background Color of the body
+*/
 body{
     background-color: #4FB0C6;
 }
 
+/* 
+    h1 tag
+    Purpose: Change the main color of the h1 tag
+*/
 h1{
     color: #000000;
 }
 
+/* 
+    h3 tag
+    Purpose: Change the color and cursor for this tag
+*/
 h3{
     color: #000000;
     cursor: pointer;
 }
 
+/* 
+    p tag
+    Purpose: Change the weight of the font for this tag
+*/
 p{
     font-weight: bold;
 }
 
+/* 
+    ul tag
+    Purpose: take the bootstrap padding for unordered list 
+*/
 ul{
     padding-left: 0px;
 }
 
+/* 
+    ul li h4 tags
+    Purpose: Several styling changes for the final scoreboard to be centered
+*/
 ul li h4{
     padding-left: 15px;
     text-align: left;
@@ -28,12 +52,19 @@ ul li h4{
 }
 
 
+/* 
+    ul li tags
+    Purpose: To remove list bullets for buttons
+*/
 ul li{
     list-style: none;
 }
 
 
-
+/* 
+    button tag
+    Purpose: stylings to center, size and color buttons during the whole site process
+*/
 button{
     display: block; 
     height: 50px; 
