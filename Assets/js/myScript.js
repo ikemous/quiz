@@ -5,14 +5,13 @@ let totalTimeLeft = 100;//Total Time for quiz in seconds
 const PENALTY = 10;//Penalty For Incorrect Answer
 let score = 0;//Score for The Quiz
 let questionNumber = 0;//Number Of Current Question 0 = 1
-let currentId = 0;//Variable Used To count through the buttons
 let highScoreList = [];//Array used To Store Scores
 let timerInterval;//Interval For Test Timer
 let displayInterval;//Interval For Answer Repsonse Time
 let displayTime = 2;//Display Time For Answer Response
 
 //Gather All needed elements
-let listEl = document.getElementById("buttons");//Element for changing buttons and lists
+let listEl = document.getElementById("information");//Element for changing buttons and lists
 let timerEl = document.getElementById("timer");//Span for changing timer
 let displayEl = document.getElementById("display");//Display To show topics
 let responseEl = document.getElementById("response");//El to show tell user if answer was correct or incorrect
@@ -21,7 +20,7 @@ let scoreBoardEl = document.getElementById("scoreBoard");
 
 //Define All Questions
 let question1 = {//First Question
-    q: "is the answer Maybe?",//Question
+    q: "You Thought This Would Be A JavaScript Quiz Didn't You?",//Question
     a: "maybe",//Answer
     options: ["yes", "no", "also no"],//Possible options
 };
@@ -241,52 +240,6 @@ function clearScore()
     highScoreList = [];
 }//End clearScore()
 
-//              loadScoreBoard()
-//  Purpose: Display Score Of All Quizers Who've Taken The Test
-//  Parameters: None
-//  Return: None
-function loadScoreBoard()
-{
-    //Clear Elements
-    listEl.innerHTML = "";
-    responseEl.innerHTML = ""; 
-    
-    //Display Page Subject
-    displayEl.textContent = "Score Board!"; 
-
-    //Display Each Score Stored
-    for(let i  = 0; i < highScoreList.length; i++)
-    {
-        //Display Users Score
-        let scoreHolder = document.createElement("li");//Create List Element to hold user score and initials
-        listEl.appendChild(scoreHolder);//put list item in HTML
-        let userInitials = document.createElement("h4");//create header element for user initials
-        userInitials.textContent = highScoreList[i].quizer + " - ";//give element text
-        scoreHolder.appendChild(userInitials);//put el inside list item element
-        let userScore = document.createElement("h4");//Create header element for user score
-        userScore.textContent = highScoreList[i].quizScore;//give element score text
-        scoreHolder.appendChild(userScore);//Put score in list item
-
-        
-
-    }
-
-    //Make a spot to insert buttons
-    let newDiv = document.createElement("li");//Div element for buttons
-    newDiv.setAttribute("class", "row");//Give Element a class from bootstrap
-    listEl.appendChild(newDiv);//Add Element to the unordered list
-
-    //Insert a clear button
-    let clearButton = document.createElement("button");//Create button Element
-    clearButton.textContent = "CLEAR";//Add text to element
-    newDiv.appendChild(clearButton);//Add button to div element
-
-    //Insert a return button
-    let returnButton = document.createElement("button");//Create button Element
-    returnButton.textContent = "RETURN";//Add text to Button
-    newDiv.appendChild(returnButton);//Add button to the div element
-
-}//End loadScoreboard
 
 //              checkAnswer()
 //  Purpose: Check If the User clicked The Correct Answer
@@ -378,54 +331,6 @@ function startAnswerResponse(showThis)
     }, 1000 /* Speed For The Timer = 1 Second*/);
 }//End startAnswerResponse()
 
-//              loadStartButton()
-//  Purpose: Check If the User clicked The Correct Answer
-//  Parameters: None
-//  Return: None
-function loadStartButton()
-{
-    //Create Start Button
-    let newButton = document.createElement("button")//Create Button element
-    newButton.textContent = "START";//Give element text
-    listEl.appendChild(newButton);//Put element inside the HTML
-}//End loadStartButton()
-
-//              loadResults()
-//  Purpose: Load The Results page of the quiz
-//  Parameters: None
-//  Return: None
-function loadResults()
-{
-    //Change Topic of the Page
-    displayEl.textContent = "Results!";
-
-    //Create a spot for the user to input results
-    let newDiv = document.createElement("li");//create new list element
-    newDiv.setAttribute("class", "row");//Give element a class from bootstrap
-    listEl.appendChild(newDiv);//Put element inside HTML
-
-    //Header To Tell User To Input their initials
-    let promptText = document.createElement("h4");//Create header element
-    promptText.textContent = "Enter Initials:";//Give element Text
-    newDiv.appendChild(promptText);//Put element inside HTML
-
-    //Create a Input For The User To Put Their Initials In
-    let scoreInitials = document.createElement("input");//Create Input Element
-    scoreInitials.type = "text";//Give Element Text
-    scoreInitials.placeholder = "AIB";//Put Placeholder for an example
-    scoreInitials.setAttribute("id", "userInitials");//Give the input an ID for future interaction
-    newDiv.appendChild(scoreInitials);//Put input in HTML
-
-    //Create Button To Allow User To Submit Initials In ScoreBoard
-    let submitButton = document.createElement("button");//create button element
-    submitButton.setAttribute("style", "");
-    submitButton.textContent = "SUBMIT";//Give button text
-    newDiv.appendChild(submitButton);//Add Button To HTML
-    
-    //Stop Doing the loop
-    clearInterval(timerInterval);
-
-}//End loadResults()
 
 //              loadOptions()
 //  Purpose: Load The Test Options For The Quiz
@@ -458,6 +363,106 @@ function loadOptions()
         listEl.appendChild(newButton);//Add Button To HTML
     }
 }//End loadOptions()
+
+
+//              loadScoreBoard()
+//  Purpose: Display Score Of All Quizers Who've Taken The Test
+//  Parameters: None
+//  Return: None
+function loadScoreBoard()
+{
+    //Clear Elements
+    listEl.innerHTML = "";
+    responseEl.innerHTML = ""; 
+    
+    //Display Page Subject
+    displayEl.textContent = "Score Board!"; 
+
+    //Display Each Score Stored
+    for(let i  = 0; i < highScoreList.length; i++)
+    {
+        //Display Users Score
+        let scoreHolder = document.createElement("li");//Create List Element to hold user score and initials
+        listEl.appendChild(scoreHolder);//put list item in HTML
+        let userInitials = document.createElement("h4");//create header element for user initials
+        userInitials.textContent = highScoreList[i].quizer + " - ";//give element text
+        scoreHolder.appendChild(userInitials);//put el inside list item element
+        let userScore = document.createElement("h4");//Create header element for user score
+        userScore.textContent = highScoreList[i].quizScore;//give element score text
+        scoreHolder.appendChild(userScore);//Put score in list item
+
+        
+
+    }
+
+    //Make a spot to insert buttons
+    let newDiv = document.createElement("li");//Div element for buttons
+    newDiv.setAttribute("class", "row");//Give Element a class from bootstrap
+    listEl.appendChild(newDiv);//Add Element to the unordered list
+
+    //Insert a clear button
+    let clearButton = document.createElement("button");//Create button Element
+    clearButton.textContent = "CLEAR";//Add text to element
+    newDiv.appendChild(clearButton);//Add button to div element
+
+    //Insert a return button
+    let returnButton = document.createElement("button");//Create button Element
+    returnButton.textContent = "RETURN";//Add text to Button
+    newDiv.appendChild(returnButton);//Add button to the div element
+
+}//End loadScoreboard
+
+//              loadStartButton()
+//  Purpose: Check If the User clicked The Correct Answer
+//  Parameters: None
+//  Return: None
+function loadStartButton()
+{
+    //Create Start Button
+    let newButton = document.createElement("button")//Create Button element
+    newButton.textContent = "START";//Give element text
+    listEl.appendChild(newButton);//Put element inside the HTML
+}//End loadStartButton()
+
+//              loadResults()
+//  Purpose: Load The Results page of the quiz
+//  Parameters: None
+//  Return: None
+function loadResults()
+{
+    //Change Topic of the Page
+    displayEl.textContent = "Your Score is: " + totalTimeLeft;
+    timerEl.textContent = totalTimeLeft;
+    //Create a spot for the user to input results
+    let newDiv = document.createElement("li");//create new list element
+    newDiv.setAttribute("class", "row");//Give element a class from bootstrap
+    listEl.appendChild(newDiv);//Put element inside HTML
+
+    //Header To Tell User To Input their initials
+    let promptText = document.createElement("h4");//Create header element
+    promptText.setAttribute("class", "col-sm-3");
+    promptText.textContent = "Enter Initials:";//Give element Text
+    newDiv.appendChild(promptText);//Put element inside HTML
+
+    //Create a Input For The User To Put Their Initials In
+    let scoreInitials = document.createElement("input");//Create Input Element
+    scoreInitials.type = "text";//Give Element Text
+    scoreInitials.placeholder = "AIB";//Put Placeholder for an example
+    scoreInitials.setAttribute("id", "userInitials");//Give the input an ID for future interaction
+    scoreInitials.setAttribute("class", "col-sm-5");//Give the input an ID for future interaction
+    newDiv.appendChild(scoreInitials);//Put input in HTML
+
+    //Create Button To Allow User To Submit Initials In ScoreBoard
+    let submitButton = document.createElement("button");//create button element
+    submitButton.setAttribute("style", "");
+    submitButton.setAttribute("class", "col-sm-4");
+    submitButton.textContent = "SUBMIT";//Give button text
+    newDiv.appendChild(submitButton);//Add Button To HTML
+    
+    //Stop Doing the loop
+    clearInterval(timerInterval);
+
+}//End loadResults()
 
 scoreBoardEl.addEventListener("click", loadScoreBoard);
 
