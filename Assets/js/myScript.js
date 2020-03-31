@@ -2,7 +2,7 @@
 
 //Initialize Variables To Be Used throughout funcions
 let totalTimeLeft = 100;//Total Time for quiz in seconds
-const PENALTY = 10;//Penalty For Incorrect Answer
+const  PENALTY = 10;//Penalty For Incorrect Answer
 let score = 0;//Score for The Quiz
 let questionNumber = 0;//Number Of Current Question 0 = 1
 let highScoreList = [];//Array used To Store Scores
@@ -158,6 +158,8 @@ function startQuiz()
         }
 
     }, 1000 /* Speed For The Timer = 1 Second*/);
+
+
 }//End StartQuiz()
 
 //              storeScoreBoard()
@@ -207,8 +209,6 @@ function checkAnswer(event)
     {
         // Display Answer Was Correct
         startAnswerResponse("CORRECT");
-        //Increase Question Number
-        questionNumber++;
     }
     //User Didn't Click The Right Answer
     else
@@ -231,6 +231,9 @@ function checkAnswer(event)
             totalTimeLeft -= PENALTY;
         }
     }
+    
+    //Increase Question Number
+    questionNumber++;
 
 }//End checkAnswer()
 
