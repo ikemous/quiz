@@ -232,6 +232,7 @@ function checkAnswer(event)
         }
     }
     
+    console.log(questionNumber);
     //Increase Question Number
     questionNumber++;
 
